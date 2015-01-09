@@ -1,0 +1,63 @@
+unit Unit1;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls;
+
+type
+  TForm1 = class(TForm)
+    ListBox1: TListBox;
+    ListBox2: TListBox;
+    Button1: TButton;
+    procedure Button1Click(Sender: TObject);
+    procedure ListBox1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    procedure PokazaZawartoscDrugiegoPanela;
+  end;
+
+var
+  Form1: TForm1;
+  Tab: array[1..50, 1..30] of Integer;
+
+implementation
+
+{$R *.dfm}
+
+procedure TForm1.Button1Click(Sender: TObject);
+var
+  I, J: Integer;
+begin
+  FillChar(Tab, SizeOf(Tab), 0); // to jest taaka fajna funkcja np do czyszczenia tablic, tu wypelniam zerami
+                                 // p.s. trzeba ci wgrtac taki patch do polskich znakow
+  for I:=1 to 50 do
+    for J:= 1 to 30 do
+      Tab[I, J]:= I + J + 100;
+
+   ListBox1.Items.Clear;  // czyszczę pierwszy panel
+   for I:=1 to 50 do ListBox1.Items.Append(IntToStr(I)); //  numeruję 1..50
+   // i teraz jak klikne na jaks pozycje 1..50 to masię pokazywac lista dla n-teej pozycji... taki byl zamysl
+   ListBox1.ItemIndex:= 0;  // ustawiam na pierwszej pozycji kursor
+   PokazaZawartoscDrugiegoPanela;
+end;
+
+
+procedure TForm1.ListBox1Click(Sender: TObject);
+begin
+  PokazaZawartoscDrugiegoPanela;
+end;
+
+procedure TForm1.PokazaZawartoscDrugiegoPanela;
+var
+  J: Integer;
+begin
+  ListBox2.Items.Clear;
+  // tutaj wczytuję na starcie zawartosc podtablicy wskazanej w pierwszym panelu
+  for J:=1 to 30 do ListBox2.Items.Append(IntToStr(Tab[ListBox1.ItemIndex + 1, J]));
+end;
+
+end.
